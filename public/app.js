@@ -11,6 +11,15 @@ const appState = {
 document.addEventListener('DOMContentLoaded', () => {
     fetchPublicData();
 });
+// When user submits the "Add Car" form
+async function addCar(carData) {
+  const res = await fetch("/api/cars", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(carData),
+  });
+  return res.json();
+}
 
 // Fetch Showroom Data
 async function fetchPublicData() {
