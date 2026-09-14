@@ -119,6 +119,31 @@ app.get('/share/car/:id', (req, res) => {
 <script>window.location.href = "${siteUrl}";</script></head><body>Redirecting to showroom...</body></html>`);
 });
 
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+
+    // API route: GET all cars
+    if (url.pathname === "/api/cars" && request.method === "GET") {
+      return new Response(JSON.stringify(cars), {
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // API route: Add a new car (POST)
+    if (url.pathname === "/api/cars" && request.method === "POST") {
+      const body = await request.json();
+      cars.push(body);
+      return new Response(JSON.stringify({ success: true }), {
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // Serve your frontend (app.js, HTML, etc.)
+    return env.ASSETS.fetch(request);
+  },
+};
+
 // Admin Routes
 app.post('/api/admin/login', (req, res) => {
     const { username, password } = req.body || {};
